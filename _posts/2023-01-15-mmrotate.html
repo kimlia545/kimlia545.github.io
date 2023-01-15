@@ -1,0 +1,86 @@
+---
+layout: post
+title: "[논문 리뷰] MMRotate: A Rotated Object Detection Benchmark using PyTorch(2022)"
+date: 2023-01-14 10:45:13 -0400
+categories: Paper
+background: '/img/posts/P0134.png'
+---
+
+<p>Pytorch를 기반으로 하는 회전 객체 감지 open-source MMRotate을 소개하는 논문입니다. </p>
+
+<h2 class="section-heading">MMRotate: A Rotated Object Detection Benchmark using PyTorch(2022)</h2>
+
+<h3 class="section-heading">Abstract</h3>
+
+<p>딥러닝을 기반으로 인기 있는 회전된 개체 감지 알고리즘에 대한 훈련, 추론, 평가의 일관된 알고리즘 프레임워크를 제공하는 MMRotate라는 오픈 소스 도구 상자를 제공합니다.
+    MMRotate는 18개의 최신 알고리즘을 구현하고 가장 자주 사용되는 세 가지 각도 정의 방법을 지원합니다. 
+    회전된 물체 감지 관련 문제의 향후 연구 및 산업 응용을 용이하게 하기 위해 회전된 물체 감지의 성능에 대한 통찰력을 제공하기 위해 많은 훈련된 모델과 자세한 벤치마크를 제공합니다.<br> 
+    MMRotate는 https://github.com/open-mmlab/mmrotate에서 공개적으로 릴리스됩니다.
+</p>
+
+<h3 class="section-heading">KEYWORDS</h3>
+<ul type="disc">
+    <li>open source</li>
+    <li>rotation detection</li>
+    <li>oriented object detection</li>
+</ul>
+
+<h3 class="section-heading">1 INTRODUCTION</h3>
+<p>faces detection, text detection, aerial images detection 객체 감지 작업에서 수평 경계 상자(HBB) 대신 방향성 경계 상자(OBB)가 널리 사용됩니다. 
+    객체를 더 잘 정렬하여 더 정확하게 식별할 수 있기 때문입니다. 
+    이러한 종류의 특수 물체 감지를 회전된 물체 감지라고 합니다.
+    위에서 언급된 3가지 외에도 회전된 객체 감지는 3D objects detection, retail scenes detection에도 사용됩니다.
+    서로 다른 접근법은 서로 다른 각도 정의 방법, 최적화 전략(예: 옵티마이저, 학습 속도 일정, 에포크 수, 데이터 증강 파이프라인), CUDA 연산자(예: OBB용 IoU 및 NMS)를 활용합니다.
+    다양한 알고리즘을 통합하면 코드 재사용이 가능하므로 알고리즘 구현이 크게 간소화됩니다. 
+    또한 통합 프레임워크를 통해 서로 다른 접근 방식을 공정하게 비교할 수 있으며 주요 유효 구성 요소를 쉽게 조사할 수 있습니다. 
+    MMRotate는 다양한 오픈 소스 도구 상자에서 대부분의 각도 정의 방법을 지원하며 회전된 물체 감지에 대한 향후 연구를 용이하게 할 것입니다.
+    분산된 교육, 테스트 스크립트 외에도 시각화, 데모를 다루는 풍부한 유틸리티 도구 세트를 제공합니다.
+
+</p>
+<h3 class="section-heading">2 RELATED WORK</h3>
+
+<h4 class="section-heading">Aerial image detection</h4>
+<p>회전된 물체 감지는 수평 감지보다 더 정확한 예측 결과를 제공하지만 새로운 경계 상자 표현을 정의해야 합니다.
+    가장 일반적인 것은 𝜃기반 표현(𝑥, 𝑦, 𝑤, ℎ, 𝜃)이며 수평 상자를 기반으로 추가 각도 매개변수를 추가합니다.
+    각도 범위에 따라 아래와 같이 나눌 수 있습니다. 
+</p>
+<ul type="disc">
+    <li>OpenCV (𝐷 𝑜𝑐 , 𝜃 ∈ [−𝜋/2, 0))</li>
+    <li>long edge 90° (𝐷 𝑙𝑒90 , 𝜃 ∈ [−𝜋/2, 𝜋/2))</li>
+    <li>long edge 135° (𝐷 𝑙𝑒135 , 𝜃 ∈ [−𝜋/4, 3𝜋/4))</li>
+</ul>
+
+<h4 class="section-heading">Open source toolbox</h4>
+<img class="img-fluid" src="https://user-images.githubusercontent.com/72369991/212550181-2b83e9d8-5a81-4a36-bbbf-1c26f66ee5d8.png" alt="Demo Image">
+<p style="text-align:center">오픈 소스 회전 개체 감지 벤치마크</p>
+    <ul type="disc">
+        <li><a href="https://github.com/dingjiansw101/AerialDetection">AerialDet</a></li>
+        <li><a href="https://github.com/Jittor/JDet">JDet</a></li>
+        <li><a href="https://github.com/jbwang1997/OBBDetection">OBBDet</a></li>
+        <li><a href="https://github.com/yangxue0827/RotationDetection">AlphaRotate</a></li>
+        <li><a href="https://github.com/open-mmlab/mmrotate">MMRotate</a></li>
+    </ul>
+
+<h3 class="section-heading">3 ROTATED OBJECT DETECTION STUDIES</h3>
+<h4 class="section-heading">Angle definition method</h4>
+<p>OpenCV, long edge 90°, long edge 135° 각도 모두 MMRotate에서 지원됩니다. 
+    모든 회전 물체 감지 알고리즘은 구성 파일을 수정하여 이러한 세 가지 각도 정의 방법 간에 쉽게 전환할 수 있습니다.</p>
+<h4 class="section-heading">Backbone</h4>
+<p>ResNet50은 객체 감지 방식에 일반적으로 사용됩니다. 
+    정확도를 향상시키기 위해 트랜스포머 기반 백본 Swin transformer도 도입합니다. </p>
+<h4 class="section-heading">Loss</h4>
+<p>GWD, KLD, KFIoU는 회전된 객체 감지기를 훈련하기 위해 서로 다른 손실을 제안합니다.</p>
+<h4 class="section-heading">Mixed precision training and Useful tools</h4>
+<p>MMRotate의 모든 탐지기는 mixed precision training을 지원합니다. 
+    MMRotate는 또한 효율적이고 편리한 다양한 도구(시각화, 혼란 행렬 분석, 거대한 이미지 추론 포함)를 제공하여 연구자가 회전된 물체 감지 알고리즘 자체에 집중할 수 있도록 합니다.</p>
+
+<h3 class="section-heading">4 CONCLUSIONS</h3>
+<p>시각적 회전 감지에 대한 실질적인 중요성과 학문적 출현으로 MMRotate는 Apache-2.0 라이선스에 따라 PyTorch에서 시각적 객체 회전 감지를 위한 딥러닝 벤치마크입니다. 
+    이 아키텍처는 산업 응용 프로그램과 학술 연구 모두에서 다양한 영역에서 회전된 물체 감지의 배포를 용이하게 하기 위해 유연성과 사용 편의성을 위해 지정되었습니다.
+    </p>
+
+
+<h3 class="section-heading">References</h3>
+<p>MMRotate paper : https://arxiv.org/abs/2204.13317 
+</p>
+
