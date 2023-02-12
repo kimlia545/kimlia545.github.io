@@ -1,0 +1,115 @@
+---
+layout: post
+title: "[컴퓨터비전] Object Tracking이란?"
+date: 2023-01-28 01:45:13 -1000
+background: '/img/posts/P0134.png'
+---
+
+<p>Object Tracking이란 영상에서 객체의 움직임을 추적하는 딥러닝 프로세스입니다.</p>
+
+<p style="text-align: center;"><img class="img-fluid" src="https://user-images.githubusercontent.com/72369991/215268520-18b3a51e-14b6-480d-b02c-aaf4b5295756.gif" alt="Demo Image">
+</p>
+<p style="text-align:center"><a href="https://just-merwan.medium.com/what-is-objects-tracking-in-computer-vision-d0f76b3607a8 ">이미지출처</a> </p>
+
+<h4>Object Detection과  Object Tracking의 차이</h4>
+<p>
+    Object Detection은 객체 주위에 bounding box를 생성하여 객체를 분류, 감지합니다.
+    Object Tracking은 각 개체에 고유한 식별 할당하고 관련 정보를 저장하면서 비디오의 연속 프레임을 통해 이동하면서 감지된 객체를 추적하여 위치를 예측합니다.
+</p>
+<p style="text-align: center;"><img class="img-fluid" src="https://user-images.githubusercontent.com/72369991/215270315-ad8cb1d8-b1e7-4855-98d6-18f4ccc2c3ef.jpg" alt="Demo Image">
+</p>
+<p style="text-align:center"><a href="https://viso.ai/deep-learning/object-tracking/">이미지출처</a> </p>
+<p>
+    Object Detection이 사물의 위치를 감지했다면 여러 대의 자동차가 있는 영상에서 모든 자동차를 “자동차”로 식별합니다.
+    Object Tracking은 움직이는 객체를 추적하여 서로 다른 자동차들이 고유 ID로 식별하여 추적합니다.
+    Object Tracking은 다음 프레임에서 대상 객체의 위치를 ​​추정하는 반면 Object Detectionio는 매 프레임마다 대상 객체에 의존합니다. <br>
+    1. Object Tracking이 Object Detection보다 속도가 빠릅니다. 
+    Object Detection는 모든 프레임에서 객체를 감지해야 하지만 Object Tracking은 이전 프레임에서 감지된 개체를 추적할때 개체의 모양에 대해 정보를 알고 있습니다. 
+    이전 프레임에서의 위치와 움직임의 방향과 속도도 알기 때문에 다음 프레임에서 이 정보들을 바탕으로 개체의 위치를 예측하고 예상 위치 주변에서 검색을 수행하여 개체를 보다 빠르게 찾습니다. <br>
+    2. Object Tracking은 일정 수준의 폐색을 처리하기때문에 Object Tracking이 객체가 다른 물체와 겹치는 폐색에 더 강합니다. 
+</p>
+
+
+
+<h4>유형</h4>
+<h5>이미지 추적</h5>
+이미지를 자동으로 인식하고 추적하는 작업입니다. 
+증강현실(AR) 분야에 주로 적용된다. 예를 들어, 카메라를 통한 입력으로 2차원 이미지가 주어지면 알고리즘은 2차원 평면 이미지를 감지하여 3D 그래픽 개체를 중첩하는 데 사용할 수 있습니다.
+이미지 추적을 사용하면 사진, 그림, 모든 이미지를 스캔하고 그 위에 콘텐츠를 표시할 수 있습니다.
+
+<h5>비디오 추적</h5>
+비디오 추적은 라이브, 실시간 영상, 녹화된 비디오 파일을 처리할 수 있습니다.
+비디오 추적은 비디오 프레임을 순차적으로 분석하고 주변에 경계 상자를 생성하고 예측하여 개체의 과거 위치를 현재 위치와 연결하는 것입니다. 
+<br><br>
+
+<h4>수준</h4>
+<h5>single Object Tracking(SOT)</h5>
+시각적 객체 추적 Visual Object Tracking(VOT)라고도 합니다.
+영상에서 여러 객체가 있더라도 하나의 단일 개체만을 추적합니다.
+관심객체(추적할 객체)는 첫번째 프레임에서 정의되어 그 다음 모든 프레임에서 동일한 객체를 찾는 작업 수행을 수행합니다. 첫번째 경계 상자를 수동으로 제공해야 합니다.
+Single Object Tracking은 다른 물체와의 구별이 필요 없으므로 상대적으로 쉽습니다.
+
+<h5>Multiple Object Tracking(MOT)</h5>
+multi-target tracking (MTT)이라고도 합니다.
+영상에서 둘 이상의 객체를 감지하고 추적합니다.
+개체 추적 알고리즘은 각 프레임의 개체 수를 결정하고, 관심 있는 모든 개체를 식별하고, 개체 주위에 경계 상자를 그리고, 각 개체에 고유한 좌표를 할당하고, 각 개체가 프레임을 떠날 때까지 연속 프레임에서 각 개체의 ID를 추적합니다.
+유사한 모양을 가진 객체 간의 폐색, 상호작용과 각 개체별 고유한 움직임을 그려야해서 더 어렵습니다.
+MOT 알고리즘은 각 경계 상자에 대상 ID를 추가로 할당합니다. 이 대상 ID는 감지라고 하며 모델이 클래스 내의 개체를 구별합니다.
+<br><br>
+
+<h4>어려운 과제</h4>
+<img class="img-fluid" src="https://user-images.githubusercontent.com/72369991/215270969-645216e8-782a-4c99-9a86-b465a6bc211f.png" alt="Demo Image">
+<p style="text-align:center">출처 : A Survey of Appearance Models in Visual Object Tracking</p>
+
+회전된 상자의 정의가 다르기 때문에 다음 사항에 유의해야 합니다.
+<ol type="1">
+    <li>추적 속도</li>
+    추적 모델은 물체 감지, 지역화, 분류를 수행하고 추적하는 멀티태스킹 알고리즘입니다.
+    실시간 객체 추적 모델에 추적 속도 향상이 필수적입니다.
+    <li>복잡한 배경</li>
+    배경은 모델의 정확도에 영향을 미칩니다. 예를들면 배경이 물체와 같은 색상이거나 모양일 경우 복잡한 배경, 안개, 빛 반사, 객체를 추적하기 어렵습니다.
+    <li>다양한 공간 척도</li>
+    객체의 다양한 크기와 모양에 혼돈되어 일반화 오류가 발생할수있습니다.
+    <li>물체의 변형 </li>
+    포즈, 관절, 사이즈가 달라진 경우 어렵습니다.
+    <li>저해상도</li>
+    이미지기의 해상도가 낮거나 픽셀화 된 경우 어렵습니다.
+    <li>폐색</li>
+    여러 객체가 너무 가까워 중첩되면 폐색이 발생합니다.
+    가려진 객체를 하나로 보거나 처음 식별한 개체가 다시 새 개체로 추적하는 문제가 발생할수 있습니다.
+    <li>객체간의 유사성</li>
+    예를 들면 유사한 옷, 악세사리등의 특성으로 대상 객체의 ID가 전환되는 경우가 발생합니다.
+    <li>모션 블러</li>
+    프레임에서 움직이는 물체가 왜곡된 경우 어렵습니다.
+</ol>
+
+<h4>응용분야 사용사례</h4>
+<ol type="1">
+<li>자율주행</li>
+자율주행 차의 장애물 감지 , 도로 및 인도 보행자 감지, 충돌 회피 및 차량 속도 감지, 교통 모니터링 및 경로 추정 등
+<li>소매 애플리케이션</li>
+사람 감지 및 추적, 계산원 없는 체크아웃 시스템, 쇼핑 카트 안팎의 항목 추적, 건물에 출입하는 사람 추적 등
+<li>감시 카메라</li>
+군중 모니터링, 마스크 사용 추적, 의심스러운 활동 또는 항목을 가진 사람 추적 등
+<li>스포츠 분석</li> 
+농구의 궤적 추적 , 골 수를 계산하기 위한 축구 추적, 선수의 움직임을 이해하고 부상을 방지하기 위한 선수 추적 등
+</ol>
+
+<h4>오픈 소스</h4>
+<ol type="1">
+    <li>OpenCV 개체 추적</li>
+opencv에 내장된 알고리즘을 사용합니다.
+BOOSTING, MIL(Multiple Instance Learning), KCF(Kernelized Correlation Filters), CSRT(Discriminative Correlation Filter with Channel and Spatial Reliability), MedianFlow, TLD(Tracking Learning Detection) MOSSE(Minimum Output Sum of Squared Error), GOTURN(Generic Object Tracking Using Regression Network)등이 있습니다.
+
+<li><a href="https://github.com/open-mmlab/mmtracking">MMTracking</a></li>
+MMTracking은 PyTorch의 오픈 소스 비디오 인식 도구 상자입니다. OpenMMLab 프로젝트 의 일부입니다.
+    <li><a href="https://github.com/nwojke/deep_sort">DeepSORT</a></li>
+온라인 기반 추적 알고리즘인 Simple Online Real-time Tracker 또는 SORT의 확장입니다. 
+<li><a href="https://github.com/tryolabs/norfair">NORFAIR</a></li>
+실시간 다중 객체 추적을 위한 맞춤형 경량 Python 라이브러리입니다.
+<br><br>
+
+<h2>References</h2>
+<a href="https://blog.roboflow.com/what-is-object-tracking-computer-vision/">https://blog.roboflow.com/what-is-object-tracking-computer-vision/</a> 
+<a href="https://viso.ai/deep-learning/object-tracking/">https://viso.ai/deep-learning/object-tracking/</a> 
+<a href="https://www.v7labs.com/blog/object-tracking-guide/">https://www.v7labs.com/blog/object-tracking-guide/</a> 
